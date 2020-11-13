@@ -18,7 +18,7 @@ public class PGP extends javax.swing.JFrame {
     private int[] upperCases=IntStream.rangeClosed(65, 90).toArray();
     private boolean numBool=false,upperCaseBool=false,lowerCaseBool=true;
     private String generatedPassword="";
-    private charGenerator randNum=new charGenerator();
+    private numGenerator randNum=new numGenerator();
     private int passwordLength=8;
     public PGP() {
         initComponents();
@@ -167,7 +167,7 @@ public class PGP extends javax.swing.JFrame {
                 numBool=true;
                 break;
         }
-    }//GEN-LAST:event_numCBActionPerformed
+    }
 
     private void letterCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_letterCBActionPerformed
          switch(letterCB.getSelectedIndex()){
@@ -188,8 +188,7 @@ public class PGP extends javax.swing.JFrame {
                 lowerCaseBool=true;
                 break;    
          }
-    }//GEN-LAST:event_letterCBActionPerformed
-
+    }
     private void genBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genBtnActionPerformed
         
         randNum.Clear();
@@ -203,7 +202,12 @@ public class PGP extends javax.swing.JFrame {
             generatedPassword+=String.valueOf((char)randNum.getRandom());
             
         }while(checkPassword(generatedPassword));
+        /****************
         
+        there is a bug here it should be whille(!checkPassword(geretedPassword)
+        but if it is like this it will crash in any case other than mixed letters with numbers 
+        
+       ******************/
         txt.setText(generatedPassword);
     }//GEN-LAST:event_genBtnActionPerformed
 
@@ -236,17 +240,15 @@ public class PGP extends javax.swing.JFrame {
      private boolean checkPassword(String str) {
          boolean nFlag=false,uFlag=false,lFlag=false;
          char ch;
-         if(numBool)
-             for(int i=0;i < str.length();i++) {
-        ch = str.charAt(i);
-        if( Character.isDigit(ch)||numBool) {
-            nFlag = true;
+        for(int i=0;i < str.length();i++) {
+            ch = str.charAt(i);
+            if( Character.isDigit(ch)||!numBool)
+                nFlag = true;
+            else if (Character.isUpperCase(ch)||!upperCaseBool)
+                uFlag = true;
+            else if (Character.isLowerCase(ch)||!lowerCaseBool)
+                lFlag = true;
         }
-        else if (Character.isUpperCase(ch)||upperCaseBool) {
-            uFlag = true;
-        } else if (Character.isLowerCase(ch)||lowerCaseBool) {
-            lFlag = true;
-        }}
         return(nFlag&&lFlag&&uFlag);
     }
     
