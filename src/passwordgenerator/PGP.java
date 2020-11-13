@@ -201,13 +201,8 @@ public class PGP extends javax.swing.JFrame {
             for(int i=0;i<passwordLength;i++)
             generatedPassword+=String.valueOf((char)randNum.getRandom());
             
-        }while(checkPassword(generatedPassword));
-        /****************
-        
-        there is a bug here it should be whille(!checkPassword(geretedPassword)
-        but if it is like this it will crash in any case other than mixed letters with numbers 
-        
-       ******************/
+        }while(!checkPassword(generatedPassword));
+ 
         txt.setText(generatedPassword);
     }//GEN-LAST:event_genBtnActionPerformed
 
@@ -239,14 +234,19 @@ public class PGP extends javax.swing.JFrame {
     
      private boolean checkPassword(String str) {
          boolean nFlag=false,uFlag=false,lFlag=false;
-         char ch;
+         
+         if(!numBool) nFlag=true;
+         if(!lowerCaseBool) lFlag=true;
+         if(!upperCaseBool) uFlag=true;
+         
+        char ch;
         for(int i=0;i < str.length();i++) {
             ch = str.charAt(i);
-            if( Character.isDigit(ch)||!numBool)
+            if( Character.isDigit(ch))
                 nFlag = true;
-            else if (Character.isUpperCase(ch)||!upperCaseBool)
+            else if (Character.isUpperCase(ch))
                 uFlag = true;
-            else if (Character.isLowerCase(ch)||!lowerCaseBool)
+            else if (Character.isLowerCase(ch))
                 lFlag = true;
         }
         return(nFlag&&lFlag&&uFlag);
